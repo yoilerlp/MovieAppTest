@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Text, View} from 'react-native';
 
-export default class MovieDetailsScreen extends Component {
-  render() {
-    return (
-      <View>
-        <Text> I m Movie Detail </Text>
-      </View>
-    );
-  }
-}
+const MovieDetailsScreen = () => {
+  return (
+    <View>
+      <Text> I m movies Details </Text>
+    </View>
+  );
+};
+
+export default MovieDetailsScreen;
