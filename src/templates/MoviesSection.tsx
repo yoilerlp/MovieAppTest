@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, Text, StyleSheet, FlatList} from 'react-native';
+import {ThemeContext, themeContextType} from '../../App';
 import MovieCard from '../components/MovieCard';
 
 type MoviesSectionProps = {
@@ -20,20 +21,7 @@ const DATA = [
     id: '58694a0f-3da1-471f-bd96-145571e29d72',
     title: 'Third Item',
   },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
-  },
 ];
-
 
 const renderItem = ({item}) => <MovieCard title={item.title} />;
 
@@ -41,11 +29,12 @@ const MoviesSection = ({
   sectionName,
   subTitle = 'See all',
 }: MoviesSectionProps) => {
+  const {theme} = useContext<themeContextType>(ThemeContext);
   return (
     <View style={styles.sectionContainer}>
       <View style={styles.sectionTitle}>
-        <Text style={styles.sectionName}>{sectionName}</Text>
-        <Text style={styles.subTitle}>{subTitle}</Text>
+        <Text style={[styles.sectionName, theme]}>{sectionName}</Text>
+        <Text style={[styles.subTitle, theme]}>{subTitle}</Text>
       </View>
       <FlatList
         horizontal

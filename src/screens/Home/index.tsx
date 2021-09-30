@@ -2,8 +2,11 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {Input} from 'react-native-elements';
 import MoviesSection from '../../templates/MoviesSection';
+import {useThemeContext} from '../../hooks/useThemeContext';
 
 const HomeScreen = () => {
+  const {theme, colorTheme} = useThemeContext();
+  console.log(theme);
   return (
     <View style={styles.HomeContainer}>
       <View style={styles.searchSection}>
@@ -23,9 +26,10 @@ const HomeScreen = () => {
               size: 25,
             }}
           />
+          <Text>Theme - {String(colorTheme)}</Text>
         </View>
       </View>
-      <View style={styles.moviesSections}>
+      <View style={[styles.moviesSections, theme]}>
         <MoviesSection sectionName="RECOMMENDED FOR YOU" subTitle="See all" />
         <MoviesSection sectionName="TOP RATE" subTitle="See all" />
       </View>

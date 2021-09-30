@@ -3,14 +3,17 @@ import {Text, View, StyleSheet} from 'react-native';
 import {Image, Icon, Button, Rating} from 'react-native-elements';
 import {useNavigation} from '@react-navigation/native';
 import ActorsSection from '../../templates/ActorsSection';
+import {useThemeContext} from '../../hooks/useThemeContext';
 
 const imgTest = require('../../../imgTest.png');
 const hdIcon = require('../../../hdIcon.png');
 
 const MovieDetailsScreen = () => {
+  const {theme, colorTheme} = useThemeContext();
   const navigation = useNavigation();
+
   return (
-    <View style={styles.DetailsContainer}>
+    <View style={[styles.DetailsContainer, theme]}>
       <View style={styles.imgContainer}>
         <View style={[styles.iconsContainer, styles.horizontalAling]}>
           <Icon
@@ -29,27 +32,33 @@ const MovieDetailsScreen = () => {
       <View style={styles.movieInfContainer}>
         <View style={[styles.rowTitle, styles.horizontalAling]}>
           {/**/}
-          <Text style={styles.titleStyle}>Aquaman</Text>
+          <Text style={[styles.titleStyle, theme]}>Aquaman</Text>
           <Image source={hdIcon} style={styles.iconTitle} />
         </View>
         <View style={[styles.horizontalAling, styles.rowRating]}>
           <Button
-            buttonStyle={styles.btnStyles}
+            buttonStyle={[
+              styles.btnStyles,
+              {
+                backgroundColor:
+                  colorTheme === 'light' ? 'rgba(0,0,0,0.9)' : '#b2b2b2',
+              },
+            ]}
             title="WATCH NOW"
             type="solid"
-            titleStyle={styles.btnTitle}
+            titleStyle={[styles.btnTitle]}
           />
           <Rating
             type="custom"
             imageSize={22}
             readonly
             startingValue={3.5}
-            tintColor="#2c3848"
+            tintColor={colorTheme === 'light' ? 'rgba(0,0,0,0.9)' : '#2c3848'}
             style={styles.rating}
           />
         </View>
         <View>
-          <Text style={styles.movieDes}>
+          <Text style={[styles.movieDes, theme]}>
             {''}
             In 1985 Maine, lighthouse keeper Thomas Curry rescues Atlanna, the
             queen of the underwater nation of Atlantis, during a storm. They
@@ -60,18 +69,18 @@ const MovieDetailsScreen = () => {
         <ActorsSection />
         <View style={styles.movieInf}>
           <View style={styles.movieInfSection}>
-            <Text style={styles.movieInfSectionTitle}>Studio</Text>
-            <Text style={styles.moviSectionValue}>Warner Bros.</Text>
+            <Text style={[styles.movieInfSectionTitle, theme]}>Studio</Text>
+            <Text style={[styles.moviSectionValue, theme]}>Warner Bros.</Text>
           </View>
           <View style={styles.movieInfSection}>
-            <Text style={styles.movieInfSectionTitle}>Genre</Text>
-            <Text style={styles.moviSectionValue}>
+            <Text style={[styles.movieInfSectionTitle, theme]}>Genre</Text>
+            <Text style={[styles.moviSectionValue, theme]}>
               Action, Adventure, Fantasy
             </Text>
           </View>
           <View style={styles.movieInfSection}>
-            <Text style={styles.movieInfSectionTitle}>Release</Text>
-            <Text style={styles.moviSectionValue}>2018</Text>
+            <Text style={[styles.movieInfSectionTitle, theme]}>Release</Text>
+            <Text style={[styles.moviSectionValue, theme]}>2018</Text>
           </View>
         </View>
       </View>

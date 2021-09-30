@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {Avatar} from 'react-native-elements';
+import {useThemeContext} from '../hooks/useThemeContext';
 
 export type ActorCardProp = {
   firsName: string;
@@ -9,10 +10,11 @@ export type ActorCardProp = {
 const actorImg = require('../../actorTest.png');
 
 const ActorCard = ({firsName, lastName}: ActorCardProp) => {
+  const {theme} = useThemeContext();
   return (
     <View style={styles.cardContainer}>
       <Avatar rounded source={actorImg} size={60} />
-      <Text style={styles.actorNameText}>
+      <Text style={[styles.actorNameText, theme]}>
         {firsName}
         {'\n'}
         {lastName}

@@ -19,14 +19,6 @@ const ListActors: Array<ActorCardProp> = [
     firsName: 'Nikole',
     lastName: 'Kidman',
   },
-  {
-    firsName: 'Nikole',
-    lastName: 'Kidman',
-  },
-  {
-    firsName: 'Nikole',
-    lastName: 'Kidman',
-  },
 ];
 
 const ActorsSection = () => {
