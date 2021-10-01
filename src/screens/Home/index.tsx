@@ -58,7 +58,6 @@ const styles = StyleSheet.create({
   },
   moviesSections: {
     flex: 0.7,
-    backgroundColor: '#2c3848',
     borderTopStartRadius: 20,
     borderTopEndRadius: 20,
     paddingTop: 20,

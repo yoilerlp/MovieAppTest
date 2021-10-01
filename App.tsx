@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {Appearance, ColorSchemeName, StyleSheet} from 'react-native';
 import MainStack from './src/navigations/MainStack';
 import {NavigationContainer} from '@react-navigation/native';
-import {ThemeProvider} from 'react-native-elements';
+import Loader from './src/components/Loader';
 
 interface Theme {
   color: string;
@@ -10,8 +10,8 @@ interface Theme {
 }
 
 const initialTheme: Theme = {
-  color: 'black',
-  backgroundColor: 'white',
+  color: 'white',
+  backgroundColor: 'black',
 };
 
 export type themeContextType = {
@@ -26,26 +26,31 @@ export const ThemeContext = React.createContext<themeContextType>({
 
 export default function App() {
   const [theme, setTheme] = useState<Theme>(initialTheme);
-  const [colorTheme, setColortheme] = useState<ColorSchemeName>(
-    Appearance.getColorScheme(),
-  );
+  const [colorTheme, setColortheme] = useState<null | ColorSchemeName>(null);
 
   useEffect(() => {
     Appearance.addChangeListener(themeP => {
-      if (themeP.colorScheme === 'light') {
-        setTheme({...themeStyle.light});
-        setColortheme(themeP.colorScheme);
-      } else {
-        setTheme({...themeStyle.dark});
-        setColortheme(themeP.colorScheme);
-      }
+      setColortheme(themeP.colorScheme);
     });
+    setColortheme(Appearance.getColorScheme());
   }, []);
+
+  useEffect(() => {
+    if (colorTheme === 'light') {
+      setTheme(themeStyle.light);
+    } else if (colorTheme === 'dark') {
+      setTheme(themeStyle.dark);
+    }
+  }, [colorTheme]);
+
+  if (colorTheme === null) {
+    return <Loader />;
+  }
 
   return (
     <NavigationContainer>
       <ThemeContext.Provider value={{theme, colorTheme}}>
-          <MainStack />
+        <MainStack />
       </ThemeContext.Provider>
     </NavigationContainer>
   );

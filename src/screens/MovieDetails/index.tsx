@@ -1,9 +1,10 @@
 import React from 'react';
 import {Text, View, StyleSheet} from 'react-native';
-import {Image, Icon, Button, Rating} from 'react-native-elements';
+import {Image, Icon, Button} from 'react-native-elements';
 import {useNavigation} from '@react-navigation/native';
 import ActorsSection from '../../templates/ActorsSection';
 import {useThemeContext} from '../../hooks/useThemeContext';
+import Rating from '../../components/Rating';
 
 const imgTest = require('../../../imgTest.png');
 const hdIcon = require('../../../hdIcon.png');
@@ -48,14 +49,7 @@ const MovieDetailsScreen = () => {
             type="solid"
             titleStyle={[styles.btnTitle]}
           />
-          <Rating
-            type="custom"
-            imageSize={22}
-            readonly
-            startingValue={3.5}
-            tintColor={colorTheme === 'light' ? 'rgba(0,0,0,0.9)' : '#2c3848'}
-            style={styles.rating}
-          />
+          <Rating ratingValue={3.8} />
         </View>
         <View>
           <Text style={[styles.movieDes, theme]}>
@@ -145,7 +139,6 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   rating: {
-    backgroundColor: 'red',
     margin: 0,
     padding: 0,
     alignItems: 'flex-start',
