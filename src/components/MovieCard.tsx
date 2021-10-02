@@ -5,30 +5,27 @@ import {Image} from 'react-native-elements';
 import {MoviesStackProp} from '../navigations/MainStack';
 import {useThemeContext} from '../hooks/useThemeContext';
 import Rating from '../components/Rating';
+import {Movie} from '../model/Movie';
+
 type MovieCardProps = {
-  imgURL: string;
-  title: string;
-  rating: number;
+  movie: Movie;
 };
 
-const uri =
-  'https://ichef.bbci.co.uk/news/640/cpsprodpb/BF0D/production/_106090984_2e39b218-c369-452e-b5be-d2476f9d8728.jpg';
-
-const MovieCard = () => {
+const MovieCard = ({movie}: MovieCardProps) => {
   const {theme} = useThemeContext();
   const navigation = useNavigation<MoviesStackProp>();
   return (
     <View style={styles.cardContainer}>
       <Image
-        source={{uri: uri}}
+        source={{uri: movie.poster_path}}
         PlaceholderContent={<ActivityIndicator />}
         style={styles.imgStyle}
         onPress={() => {
-          navigation.navigate('MovieDetails');
+          navigation.navigate('MovieDetails', {id: movie.id});
         }}
       />
-      <Text style={[styles.titleCard, theme]}>Avenger ENDGAME</Text>
-      <Rating ratingValue={3.8} />
+      <Text style={[styles.titleCard, theme]}>{movie.title.slice(0, 18)}</Text>
+      <Rating ratingValue={movie.vote_average / 2} />
     </View>
   );
 };
@@ -44,6 +41,7 @@ const styles = StyleSheet.create({
     height: 160,
     borderRadius: 25,
     marginBottom: 10,
+    resizeMode: 'stretch',
   },
   titleCard: {
     color: 'white',

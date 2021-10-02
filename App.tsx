@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import {Appearance, ColorSchemeName, StyleSheet} from 'react-native';
 import MainStack from './src/navigations/MainStack';
 import {NavigationContainer} from '@react-navigation/native';
+import {store} from './src/store/store';
+import {Provider} from 'react-redux';
 import Loader from './src/components/Loader';
 
 interface Theme {
@@ -44,14 +46,16 @@ export default function App() {
   }, [colorTheme]);
 
   if (colorTheme === null) {
-    return <Loader />;
+    return <Loader sizeIndicator={100} />;
   }
 
   return (
     <NavigationContainer>
-      <ThemeContext.Provider value={{theme, colorTheme}}>
-        <MainStack />
-      </ThemeContext.Provider>
+      <Provider store={store}>
+        <ThemeContext.Provider value={{theme, colorTheme}}>
+          <MainStack />
+        </ThemeContext.Provider>
+      </Provider>
     </NavigationContainer>
   );
 }

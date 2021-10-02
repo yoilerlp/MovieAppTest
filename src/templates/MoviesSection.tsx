@@ -1,33 +1,30 @@
 import React, {useContext} from 'react';
-import {View, Text, StyleSheet, FlatList} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  ListRenderItemInfo,
+} from 'react-native';
 import {ThemeContext, themeContextType} from '../../App';
+import Loader from '../components/Loader';
 import MovieCard from '../components/MovieCard';
+import {Movie} from '../model/Movie';
 
 type MoviesSectionProps = {
   sectionName: string;
   subTitle: string;
+  movieState: {
+    loading: boolean;
+    error: undefined | string;
+    movies: Movie[];
+  };
 };
-
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'First Item',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Second Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
-  },
-];
-
-const renderItem = ({item}) => <MovieCard title={item.title} />;
 
 const MoviesSection = ({
   sectionName,
   subTitle = 'See all',
+  movieState,
 }: MoviesSectionProps) => {
   const {theme} = useContext<themeContextType>(ThemeContext);
   return (
@@ -36,12 +33,18 @@ const MoviesSection = ({
         <Text style={[styles.sectionName, theme]}>{sectionName}</Text>
         <Text style={[styles.subTitle, theme]}>{subTitle}</Text>
       </View>
-      <FlatList
-        horizontal
-        data={DATA}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-      />
+      {movieState.loading ? (
+        <Loader sizeIndicator={40} />
+      ) : (
+        <FlatList
+          horizontal
+          data={movieState.movies}
+          renderItem={({item}: ListRenderItemInfo<Movie>) => (
+            <MovieCard movie={item} />
+          )}
+          keyExtractor={item => String(item.id)}
+        />
+      )}
     </View>
   );
 };

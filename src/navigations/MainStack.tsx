@@ -5,14 +5,15 @@ import {
 } from '@react-navigation/native-stack';
 import Home from '../screens/Home';
 import MovieDetails from '../screens/MovieDetails';
+import {RouteProp} from '@react-navigation/native';
 
 export type StacksScreens = {
   Home: undefined;
-  MovieDetails: undefined;
+  MovieDetails: {id: number};
 };
 
 export type MoviesStackProp = NativeStackNavigationProp<StacksScreens>;
-
+export type MovieDetailsScreenProps = RouteProp<StacksScreens, 'MovieDetails'>;
 const Stack = createNativeStackNavigator<StacksScreens>();
 
 const MainStack = () => {

@@ -1,17 +1,43 @@
-import React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import React, {useEffect} from 'react';
+import {Text, View, ScrollView} from 'react-native';
 import {Image, Icon, Button} from 'react-native-elements';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import styles from './styles';
 import ActorsSection from '../../templates/ActorsSection';
 import {useThemeContext} from '../../hooks/useThemeContext';
 import Rating from '../../components/Rating';
+import {MovieDetailsScreenProps} from '../../navigations/MainStack';
+import Loader from '../../components/Loader';
+import ErrorView from '../../components/ErrorView';
+import {RootState} from '../../store/store';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  getActorsMovieAction,
+  getMovieDetailsAction,
+} from '../../store/slices/movieDetails';
 
-const imgTest = require('../../../imgTest.png');
 const hdIcon = require('../../../hdIcon.png');
 
 const MovieDetailsScreen = () => {
   const {theme, colorTheme} = useThemeContext();
   const navigation = useNavigation();
+  const route = useRoute<MovieDetailsScreenProps>();
+  const {cast, movieDetails} = useSelector(
+    (state: RootState) => state.movieDetails,
+  );
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getMovieDetailsAction(route.params.id));
+    dispatch(getActorsMovieAction(route.params.id));
+  }, [dispatch, route.params.id]);
+
+  if (movieDetails.loading) {
+    return <Loader sizeIndicator={100} />;
+  }
+
+  if (movieDetails.loading) {
+    return <ErrorView msg={String(movieDetails.error)} sub="Try it again" />;
+  }
 
   return (
     <View style={[styles.DetailsContainer, theme]}>
@@ -28,12 +54,17 @@ const MovieDetailsScreen = () => {
           />
           <Icon name="heart" type="font-awesome-5" color="white" size={15} />
         </View>
-        <Image source={imgTest} style={styles.imgBanner} />
+        <Image
+          source={{uri: movieDetails.data.backdrop_path}}
+          style={styles.imgBanner}
+        />
       </View>
       <View style={styles.movieInfContainer}>
         <View style={[styles.rowTitle, styles.horizontalAling]}>
           {/**/}
-          <Text style={[styles.titleStyle, theme]}>Aquaman</Text>
+          <Text style={[styles.titleStyle, theme]}>
+            {movieDetails.data?.title}
+          </Text>
           <Image source={hdIcon} style={styles.iconTitle} />
         </View>
         <View style={[styles.horizontalAling, styles.rowRating]}>
@@ -49,32 +80,41 @@ const MovieDetailsScreen = () => {
             type="solid"
             titleStyle={[styles.btnTitle]}
           />
-          <Rating ratingValue={3.8} />
+          <Rating ratingValue={movieDetails.data?.vote_average / 2} />
         </View>
-        <View>
+        <ScrollView style={styles.textDesConatiner}>
           <Text style={[styles.movieDes, theme]}>
             {''}
-            In 1985 Maine, lighthouse keeper Thomas Curry rescues Atlanna, the
-            queen of the underwater nation of Atlantis, during a storm. They
-            eventually fall in love and have a son named Arthur, who is born
-            with the power to communicate with marine lifeforms.{' '}
+            {movieDetails.data?.overview}{' '}
           </Text>
+        </ScrollView>
+        <View style={styles.actorsContainer}>
+          {cast.loading ? (
+            <Loader sizeIndicator={20} />
+          ) : (
+            <ActorsSection ListActors={cast.actorsList} />
+          )}
         </View>
-        <ActorsSection />
         <View style={styles.movieInf}>
           <View style={styles.movieInfSection}>
-            <Text style={[styles.movieInfSectionTitle, theme]}>Studio</Text>
-            <Text style={[styles.moviSectionValue, theme]}>Warner Bros.</Text>
+            <Text style={[styles.movieInfSectionTitle, theme]}>Studios</Text>
+            <Text style={[styles.moviSectionValue, theme]}>
+              {movieDetails.data?.production_companies
+                .map(p => p.name + ',  ')
+                .slice(0, 2)}
+            </Text>
           </View>
           <View style={styles.movieInfSection}>
             <Text style={[styles.movieInfSectionTitle, theme]}>Genre</Text>
             <Text style={[styles.moviSectionValue, theme]}>
-              Action, Adventure, Fantasy
+              {movieDetails.data?.genres.map(g => g.name + ',  ').slice(0, 4)}
             </Text>
           </View>
           <View style={styles.movieInfSection}>
             <Text style={[styles.movieInfSectionTitle, theme]}>Release</Text>
-            <Text style={[styles.moviSectionValue, theme]}>2018</Text>
+            <Text style={[styles.moviSectionValue, theme]}>
+              {new Date(movieDetails.data?.release_date).getFullYear()}
+            </Text>
           </View>
         </View>
       </View>
@@ -83,88 +123,3 @@ const MovieDetailsScreen = () => {
 };
 
 export default MovieDetailsScreen;
-
-const styles = StyleSheet.create({
-  DetailsContainer: {
-    flex: 1,
-    backgroundColor: '#2c3848',
-  },
-  imgContainer: {
-    flex: 0.4,
-  },
-  imgBanner: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-    borderBottomRightRadius: 17,
-    borderBottomLeftRadius: 17,
-    //opacity: 0.7,
-  },
-  iconsContainer: {
-    position: 'absolute',
-    top: 20,
-    width: '100%',
-    paddingHorizontal: 30,
-    //borderWidth: 1,
-    borderColor: 'red',
-    opacity: 0.8,
-    zIndex: 10,
-  },
-  horizontalAling: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  movieInfContainer: {
-    flex: 0.6,
-    padding: 30,
-  },
-  rowTitle: {},
-  iconTitle: {width: 20, height: 20, borderRadius: 5},
-  btnStyles: {
-    backgroundColor: '#b2b2b2',
-    borderRadius: 20,
-  },
-  btnTitle: {
-    fontSize: 11,
-    fontWeight: 'bold',
-  },
-  titleStyle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  rowRating: {
-    marginBottom: 30,
-  },
-  rating: {
-    margin: 0,
-    padding: 0,
-    alignItems: 'flex-start',
-  },
-  movieDes: {
-    fontSize: 13,
-    lineHeight: 24,
-    color: 'white',
-    opacity: 0.7,
-  },
-  movieInf: {
-    marginTop: 15,
-  },
-  movieInfSection: {
-    flexDirection: 'row',
-    marginBottom: 5,
-  },
-  movieInfSectionTitle: {
-    fontSize: 13,
-    color: 'white',
-    fontWeight: '900',
-    marginRight: 24,
-  },
-  moviSectionValue: {
-    fontSize: 13,
-    color: 'white',
-    opacity: 0.7,
-  },
-});

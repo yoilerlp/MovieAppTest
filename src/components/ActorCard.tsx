@@ -2,18 +2,13 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {Avatar} from 'react-native-elements';
 import {useThemeContext} from '../hooks/useThemeContext';
+import {ActorCardProp} from '../model/Actor';
 
-export type ActorCardProp = {
-  firsName: string;
-  lastName: string;
-};
-const actorImg = require('../../actorTest.png');
-
-const ActorCard = ({firsName, lastName}: ActorCardProp) => {
+const ActorCard = ({firsName, lastName, profile_path}: ActorCardProp) => {
   const {theme} = useThemeContext();
   return (
     <View style={styles.cardContainer}>
-      <Avatar rounded source={actorImg} size={60} />
+      <Avatar rounded source={{uri: profile_path}} size={55} />
       <Text style={[styles.actorNameText, theme]}>
         {firsName}
         {'\n'}
