@@ -12,7 +12,7 @@ import {
 } from '../../store/slices/moviesSlice';
 
 const HomeScreen = () => {
-  const {theme, colorTheme} = useThemeContext();
+  const {theme} = useThemeContext();
   const {popularMovies, topRatedMovies} = useSelector(
     (state: RootState) => state.movies,
   );
@@ -41,7 +41,6 @@ const HomeScreen = () => {
               size: 25,
             }}
           />
-          <Text>Theme - {String(colorTheme)}</Text>
         </View>
       </View>
       <View style={[styles.moviesSections, theme]}>
