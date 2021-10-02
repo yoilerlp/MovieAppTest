@@ -81,6 +81,7 @@ export default StyleSheet.create({
     color: 'white',
     fontWeight: '900',
     marginRight: 24,
+    minWidth: 50,
   },
   moviSectionValue: {
     fontSize: 13,

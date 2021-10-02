@@ -107,7 +107,11 @@ const MovieDetailsScreen = () => {
           <View style={styles.movieInfSection}>
             <Text style={[styles.movieInfSectionTitle, theme]}>Genre</Text>
             <Text style={[styles.moviSectionValue, theme]}>
-              {movieDetails.data?.genres.map(g => g.name + ',  ').slice(0, 4)}
+              {movieDetails.data.genres
+                .map(g => g.name + ', ')
+                .slice(0, 4)
+                .toString()
+                .trim()}
             </Text>
           </View>
           <View style={styles.movieInfSection}>
